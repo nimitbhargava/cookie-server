@@ -54,8 +54,10 @@ class NameHandler(BaseHTTPRequestHandler):
         if 'cookie' in self.headers:
             try:
                 # Craft a message, escaping any HTML special chars in name.
+                in_cookie = SimpleCookie(self.headers["Cookie"])
+                name = in_cookie["yourname"].value
                 message = "Hey there, " + html_escape(name)
-            except (KeyError, cookies.CookieError) as e:
+            except (KeyError, CookieError) as e:
                 message = "I'm not sure who you are!"
                 print(e)
 
