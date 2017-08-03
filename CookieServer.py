@@ -6,7 +6,7 @@
 # that the user submits in a form.  There are two things for you to do here:
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from http import cookies
+from http.cookies import SimpleCookie, CookieError
 from urllib.parse import parse_qs
 from html import escape as html_escape
 
@@ -35,7 +35,10 @@ class NameHandler(BaseHTTPRequestHandler):
         yourname = parse_qs(data)["yourname"][0]
 
         # Create cookie.
-        c = cookies.SimpleCookie()
+        c = SimpleCookie()
+        c["yourname"] = yourname
+        c["yourname"]["domain"] = "localhost"
+        c["yourname"]["max-age"] = 600
 
         # Send a 303 back to the root page, with a cookie!
         self.send_response(303)  # redirect via GET
